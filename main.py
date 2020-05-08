@@ -1,8 +1,13 @@
 import requests
-from bs4 import BeautifulSoup
+from pymongo import MongoClient
+
+client = MongoClient("localhost", 27017)
+db = client["food-api"]
+collection = db["recipes"]
+
 
 mainUrl = "https://zagorapi.yemek.com"
-url = r"/search/recipe?recipeCategory=Hamburger&recipeCategoryUrl=%2ftarif%2fhamburgerler%2f&Start=0&Rows=12"
+url = "/search/recipe?query=*&Start=0&Rows=12"
 
 def clean(cat):
 	errors = {
@@ -51,8 +56,4 @@ while url:
 			"instructions": instructions,
 			"category": category
 		}
-
-	
-
-	
-	
+		collection.insert_one(data)
